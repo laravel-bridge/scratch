@@ -1,8 +1,8 @@
 <?php
 
-namespace MilesChou\Template;
+namespace LaravelBridge\Scratch;
 
-class Sample
+class Scratch
 {
     public function alwaysTrue()
     {
