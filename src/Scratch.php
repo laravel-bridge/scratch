@@ -2,7 +2,9 @@
 
 namespace LaravelBridge\Scratch;
 
-class Scratch
+use Illuminate\Container\Container as LaravelContainer;
+
+class Scratch extends LaravelContainer
 {
     public function alwaysTrue()
     {
