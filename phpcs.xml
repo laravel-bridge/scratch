@@ -16,4 +16,7 @@
     <!-- Paths and file to check -->
     <file>src</file>
     <file>tests</file>
+
+    <exclude-pattern>tests/Fixture/storage/framework/views</exclude-pattern>
+    <exclude-pattern>*.blade.php</exclude-pattern>
 </ruleset>
