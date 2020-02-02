@@ -38,7 +38,7 @@ Application::getInstance()
 
 ### View
 
-> Require `illuminate/view`
+> Require `illuminate/view`, require `illuminate/translation` when need translation.
 
 [index.php](/examples/view/index.php) example for View: 
 
@@ -46,6 +46,7 @@ Application::getInstance()
 use LaravelBridge\Scratch\Application;
 
 Application::getInstance()
+    ->setupTranslator(__DIR__ . '/lang')
     ->setupView(__DIR__, __DIR__ . '/compiled')
     ->bootstrap();
 
@@ -54,7 +55,7 @@ echo View::make('view', ['rows' => [1, 2, 3]]);
 
 Template example [view.blade.php](/examples/view/view.blade.php):
 
-```php
+```blade
 @foreach ($rows as $row)
     {{ $row }}
 @endforeach

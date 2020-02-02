@@ -1,5 +1,6 @@
 {
     "require": {
+        "illuminate/translation": "^6",
         "illuminate/view": "^6",
         "laravel-bridge/scratch": "dev-master"
     },
