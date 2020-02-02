@@ -73,7 +73,7 @@ class Application extends LaravelContainer
 
         $this->setupLaravelProviders();
 
-        foreach ($this->aliases as $alias => $class) {
+        foreach ($this->aliases as $class => $alias) {
             if (!class_exists($alias)) {
                 class_alias($class, $alias);
             }
