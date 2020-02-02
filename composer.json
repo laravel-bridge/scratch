@@ -34,14 +34,14 @@
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
+        "files": [
+            "src/helpers.php"
+        ],
         "psr-4": {
             "LaravelBridge\\Scratch\\": "src"
         }
     },
     "autoload-dev": {
-        "files": [
-            "src/helpers.php"
-        ],
         "psr-4": {
             "Tests\\": "tests"
         }
