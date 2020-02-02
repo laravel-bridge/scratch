@@ -1,0 +1,13 @@
+{
+    "require": {
+        "illuminate/view": "^6",
+        "laravel-bridge/scratch": "dev-master"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "require-dev": {
+        "psy/psysh": "^0.9.12"
+    }
+}
