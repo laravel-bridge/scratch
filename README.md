@@ -36,6 +36,27 @@ Application::getInstance()
     ->bootstrap();
 ```
 
+Eloquent is easy, too.
+
+```php
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+
+}
+
+// ---
+
+$user = new User();
+$user->username = 'root';
+$user->password = 'password';
+
+$user->save();
+
+var_export(User::all()->toArray());
+```
+
 ### View
 
 > Require `illuminate/view`, require `illuminate/translation` when need translation.
