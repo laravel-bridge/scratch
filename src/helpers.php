@@ -6,7 +6,7 @@
 
 use Illuminate\Container\Container;
 
-if (! function_exists('app')) {
+if (!function_exists('app')) {
     /**
      * Get the available container instance.
      *
