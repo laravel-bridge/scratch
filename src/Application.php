@@ -79,16 +79,6 @@ class Application extends LaravelContainer
             }
         }
 
-        return $this->boot();
-    }
-
-    /**
-     * Bootstrap
-     *
-     * @return Application
-     */
-    public function boot(): Application
-    {
         array_walk($this->serviceProviders, function ($provider) {
             if (method_exists($provider, 'boot')) {
                 $this->call([$provider, 'boot']);

@@ -2,8 +2,10 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
+use Carbon\Laravel\ServiceProvider;
 use Illuminate\Database\DatabaseServiceProvider;
-use Illuminate\Pagination\PaginationServiceProvider;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
+use Illuminate\Support\Facades;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use PDO;
@@ -53,6 +55,7 @@ trait SetupLaravel
      */
     public function setupCallableProvider(callable $callable)
     {
+        /** @var ServiceProvider $serviceProvider */
         $serviceProvider = $callable($this, $this->config);
         $serviceProvider->register();
 
@@ -76,6 +79,9 @@ trait SetupLaravel
         $this->config['database.fetch'] = $fetch;
 
         $this->register(DatabaseServiceProvider::class);
+
+        $this->alias('DB', Facades\DB::class);
+        $this->alias('Eloquent', EloquentModel::class);
 
         return $this;
     }
@@ -114,6 +120,7 @@ trait SetupLaravel
         $this->instance('path.lang', $langPath);
 
         $this->register(TranslationServiceProvider::class);
+        $this->alias('Lang', Facades\Lang::class);
 
         return $this;
     }
@@ -129,6 +136,7 @@ trait SetupLaravel
         $this->config['view.compiled'] = $compiledPath;
 
         $this->register(ViewServiceProvider::class);
+        $this->alias('View', Facades\View::class);
 
         return $this;
     }
