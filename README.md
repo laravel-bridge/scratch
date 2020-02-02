@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.com/laravel-bridge/scratch.svg?branch=master)](https://travis-ci.com/laravel-bridge/scratch)
 [![codecov](https://codecov.io/gh/laravel-bridge/scratch/branch/master/graph/badge.svg)](https://codecov.io/gh/laravel-bridge/scratch)
 
-For project from scratch.
+Start Laravel project from scratch.
 
 ## Installation
 
@@ -83,3 +83,8 @@ Template example [view.blade.php](/examples/view/view.blade.php):
     {{ $row }}
 @endforeach
 ```
+
+## Thanks
+
+* Idea by [@recca0120](https://github.com/recca0120/laravel-bridge)
+* Logo by [@ycs77](https://github.com/ycs77)
