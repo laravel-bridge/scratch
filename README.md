@@ -1,9 +1,13 @@
-# Laravel Bridge for Scratch
+<p align="center">
+<img src="https://laravel-bridge.github.io/banner.svg" alt="banner">
+</p>
 
-![banner](https://laravel-bridge.github.io/banner.png)
+<h1 align="center">Laravel Bridge for Scratch</h1>
 
-[![Build Status](https://travis-ci.com/laravel-bridge/scratch.svg?branch=master)](https://travis-ci.com/laravel-bridge/scratch)
-[![codecov](https://codecov.io/gh/laravel-bridge/scratch/branch/master/graph/badge.svg)](https://codecov.io/gh/laravel-bridge/scratch)
+<p align="center">
+<a href="https://travis-ci.com/laravel-bridge/scratch"><img src="https://travis-ci.com/laravel-bridge/scratch.svg?branch=master" alt="Build Status"></a>
+<a href="https://codecov.io/gh/laravel-bridge/scratch"><img src="https://codecov.io/gh/laravel-bridge/scratch/branch/master/graph/badge.svg" alt="codecov"></a>
+</p>
 
 Start Laravel project from scratch.
 
