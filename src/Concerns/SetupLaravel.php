@@ -25,6 +25,7 @@ trait SetupLaravel
             'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
             'Illuminate\Cookie\CookieServiceProvider',
             'Illuminate\Database\DatabaseServiceProvider',
+            'Illuminate\Events\EventServiceProvider',
             'Illuminate\Encryption\EncryptionServiceProvider',
             'Illuminate\Filesystem\FilesystemServiceProvider',
             'Illuminate\Foundation\Providers\FoundationServiceProvider',
