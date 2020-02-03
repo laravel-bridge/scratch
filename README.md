@@ -2,7 +2,7 @@
 <img src="https://laravel-bridge.github.io/banner.svg" alt="banner">
 </p>
 
-<h1 align="center">Laravel Bridge for Scratch</h1>
+<h1 align="center">For Scratch</h1>
 
 <p align="center">
 <a href="https://travis-ci.com/laravel-bridge/scratch"><img src="https://travis-ci.com/laravel-bridge/scratch.svg?branch=master" alt="Build Status"></a>
