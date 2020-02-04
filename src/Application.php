@@ -4,7 +4,6 @@ namespace LaravelBridge\Scratch;
 
 use Illuminate\Container\Container as LaravelContainer;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
@@ -45,11 +44,9 @@ class Application extends LaravelContainer
      */
     public function bootstrap(): Application
     {
-        if ($this->bootstrapped) {
+        if ($this->booted) {
             return $this;
         }
-
-        $this->bootstrapped = true;
 
         $this->instance('config', $this->config);
 
@@ -61,10 +58,6 @@ class Application extends LaravelContainer
 
         if (class_exists(Dispatcher::class)) {
             $this->singleton('events', Dispatcher::class);
-        }
-
-        if (class_exists(Filesystem::class)) {
-            $this->singleton('files', Filesystem::class);
         }
 
         LaravelContainer::setInstance($this);
@@ -156,7 +149,7 @@ class Application extends LaravelContainer
      * @return bool
      * @see https://github.com/laravel/framework/blob/v6.13.1/src/Illuminate/Foundation/Application.php#L559
      */
-    public function runningInConsole()
+    public function runningInConsole(): bool
     {
         if (isset($this['runningInConsole'])) {
             return (bool)$this['runningInConsole'];
