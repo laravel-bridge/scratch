@@ -25,18 +25,13 @@ class Application extends LaravelContainer
     private $bootstrapped = false;
 
     /**
-     * @var Fluent
-     */
-    private $config;
-
-    /**
      * @var ServiceProvider[]
      */
     private $serviceProviders = [];
 
     public function __construct()
     {
-        $this->config = new Fluent();
+        $this->instance('config', new Fluent());
     }
 
     /**
@@ -47,8 +42,6 @@ class Application extends LaravelContainer
         if ($this->booted) {
             return $this;
         }
-
-        $this->instance('config', $this->config);
 
         if (class_exists(Request::class)) {
             $this->singleton('request', function () {

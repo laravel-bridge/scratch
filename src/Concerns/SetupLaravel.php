@@ -57,7 +57,7 @@ trait SetupLaravel
     public function setupCallableProvider(callable $callable)
     {
         /** @var ServiceProvider $serviceProvider */
-        $serviceProvider = $callable($this, $this->config);
+        $serviceProvider = $callable($this, $this['config']);
         $serviceProvider->register();
 
         if (method_exists($serviceProvider, 'boot') === true) {
@@ -75,9 +75,9 @@ trait SetupLaravel
      */
     public function setupDatabase(array $connections, $default = 'default', $fetch = PDO::FETCH_CLASS)
     {
-        $this->config['database.connections'] = $connections;
-        $this->config['database.default'] = $default;
-        $this->config['database.fetch'] = $fetch;
+        $this['config']['database.connections'] = $connections;
+        $this['config']['database.default'] = $default;
+        $this['config']['database.fetch'] = $fetch;
 
         $this->register(DatabaseServiceProvider::class);
 
@@ -94,7 +94,7 @@ trait SetupLaravel
      */
     public function setupLocale($locale)
     {
-        $this->config['app.locale'] = $locale;
+        $this['config']['app.locale'] = $locale;
 
         return $this;
     }
@@ -133,8 +133,8 @@ trait SetupLaravel
      */
     public function setupView($viewPath, $compiledPath)
     {
-        $this->config['view.paths'] = is_array($viewPath) ? $viewPath : [$viewPath];
-        $this->config['view.compiled'] = $compiledPath;
+        $this['config']['view.paths'] = is_array($viewPath) ? $viewPath : [$viewPath];
+        $this['config']['view.compiled'] = $compiledPath;
 
         $this->register(ViewServiceProvider::class);
         $this->alias('View', Facades\View::class);
