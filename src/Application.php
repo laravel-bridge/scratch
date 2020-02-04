@@ -55,6 +55,9 @@ class Application extends LaravelContainer
 
         LaravelContainer::setInstance($this);
 
+        // Workaround for testing
+        Facade::clearResolvedInstances();
+
         Facade::setFacadeApplication($this);
 
         $this->setupLaravelProviders();
@@ -70,6 +73,9 @@ class Application extends LaravelContainer
                 $this->call([$provider, 'boot']);
             }
         });
+
+        $this->instance(LaravelContainer::class, $this);
+        $this->instance(Application::class, $this);
 
         $this->booted = true;
 
