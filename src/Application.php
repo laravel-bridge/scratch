@@ -53,7 +53,11 @@ class Application extends LaravelContainer
             $this->singleton('events', Dispatcher::class);
         }
 
+        // Set the global instance
         LaravelContainer::setInstance($this);
+
+        $this->instance(LaravelContainer::class, $this);
+        $this->instance(Application::class, $this);
 
         // Workaround for testing
         Facade::clearResolvedInstances();
@@ -73,9 +77,6 @@ class Application extends LaravelContainer
                 $this->call([$provider, 'boot']);
             }
         });
-
-        $this->instance(LaravelContainer::class, $this);
-        $this->instance(Application::class, $this);
 
         $this->booted = true;
 

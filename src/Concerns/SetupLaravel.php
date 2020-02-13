@@ -60,9 +60,7 @@ trait SetupLaravel
         $serviceProvider = $callable($this, $this['config']);
         $serviceProvider->register();
 
-        if (method_exists($serviceProvider, 'boot') === true) {
-            $this->call([$serviceProvider, 'boot']);
-        }
+        $this->serviceProviders[] = $serviceProvider;
 
         return $this;
     }
