@@ -20,11 +20,6 @@ class Application extends LaravelContainer
     private $booted = false;
 
     /**
-     * @var bool
-     */
-    private $bootstrapped = false;
-
-    /**
      * @var ServiceProvider[]
      */
     private $serviceProviders = [];
