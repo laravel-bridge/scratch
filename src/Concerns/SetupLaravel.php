@@ -70,14 +70,13 @@ trait SetupLaravel
      * @param string $default
      * @param int $fetch
      * @return static
+     * @see DatabaseServiceProvider
      */
     public function setupDatabase(array $connections, $default = 'default', $fetch = PDO::FETCH_CLASS)
     {
         $this['config']['database.connections'] = $connections;
         $this['config']['database.default'] = $default;
         $this['config']['database.fetch'] = $fetch;
-
-        $this->register(DatabaseServiceProvider::class);
 
         $this->alias('DB', Facades\DB::class);
         $this->alias('Eloquent', EloquentModel::class);
@@ -111,14 +110,13 @@ trait SetupLaravel
 
     /**
      * @param string $langPath
-     *
      * @return static
+     * @see TranslationServiceProvider
      */
     public function setupTranslator($langPath)
     {
         $this->instance('path.lang', $langPath);
 
-        $this->register(TranslationServiceProvider::class);
         $this->alias('Lang', Facades\Lang::class);
 
         return $this;
@@ -128,13 +126,13 @@ trait SetupLaravel
      * @param string|array $viewPath
      * @param string $compiledPath
      * @return static
+     * @see ViewServiceProvider
      */
     public function setupView($viewPath, $compiledPath)
     {
         $this['config']['view.paths'] = is_array($viewPath) ? $viewPath : [$viewPath];
         $this['config']['view.compiled'] = $compiledPath;
 
-        $this->register(ViewServiceProvider::class);
         $this->alias('View', Facades\View::class);
 
         return $this;

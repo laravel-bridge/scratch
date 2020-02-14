@@ -31,17 +31,8 @@ class Application extends LaravelContainer
 
     public function __construct()
     {
+        $this->instance(LaravelContainer::class, $this);
         $this->instance('config', new Fluent());
-    }
-
-    /**
-     * @return Application
-     */
-    public function bootstrap(): Application
-    {
-        if ($this->booted) {
-            return $this;
-        }
 
         if (class_exists(Request::class)) {
             $this->singleton('request', function () {
@@ -53,18 +44,24 @@ class Application extends LaravelContainer
             $this->singleton('events', Dispatcher::class);
         }
 
+        $this->setupLaravelProviders();
+    }
+
+    /**
+     * @return Application
+     */
+    public function bootstrap(): Application
+    {
+        if ($this->booted) {
+            return $this;
+        }
+
         // Set the global instance
         LaravelContainer::setInstance($this);
 
-        $this->instance(LaravelContainer::class, $this);
-        $this->instance(Application::class, $this);
-
         // Workaround for testing
         Facade::clearResolvedInstances();
-
         Facade::setFacadeApplication($this);
-
-        $this->setupLaravelProviders();
 
         foreach ($this->aliases as $class => $alias) {
             if (!class_exists($alias)) {
