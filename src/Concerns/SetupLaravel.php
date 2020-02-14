@@ -2,10 +2,10 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
-use Carbon\Laravel\ServiceProvider;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Facades;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
 use PDO;
@@ -58,6 +58,31 @@ trait SetupLaravel
     {
         /** @var ServiceProvider $serviceProvider */
         $serviceProvider = $callable($this, $this['config']);
+        $serviceProvider->register();
+
+        $this->serviceProviders[] = $serviceProvider;
+
+        return $this;
+    }
+
+    /**
+     * Setup service provider.
+     *
+     * @param string $class
+     * @return static
+     */
+    public function setupProvider(string $class)
+    {
+        if (!class_exists($class)) {
+            throw new \RuntimeException('Class: ' . $class . ' is not Exist');
+        }
+
+        $serviceProvider = new $class($this);
+
+        if (!$serviceProvider instanceof ServiceProvider) {
+            throw new \RuntimeException('Class: ' . $class . ' must extend ServiceProvider');
+        }
+
         $serviceProvider->register();
 
         $this->serviceProviders[] = $serviceProvider;
