@@ -2,11 +2,13 @@
 <img src="https://laravel-bridge.github.io/banner.svg" alt="banner">
 </p>
 
-<h1 align="center">For Scratch</h1>
-
 <p align="center">
 <a href="https://travis-ci.com/laravel-bridge/scratch"><img src="https://travis-ci.com/laravel-bridge/scratch.svg?branch=master" alt="Build Status"></a>
 <a href="https://codecov.io/gh/laravel-bridge/scratch"><img src="https://codecov.io/gh/laravel-bridge/scratch/branch/master/graph/badge.svg" alt="codecov"></a>
+<a href="https://www.codacy.com/gh/laravel-bridge/scratch"><img src="https://api.codacy.com/project/badge/Grade/f0b586d036aa4924a343051339b9b433" alt="Codacy Badge"></a>
+<a href="https://packagist.org/packages/laravel-bridge/scratch"><img src="https://poser.pugx.org/laravel-bridge/scratch/v/stable" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel-bridge/scratch"><img src="https://poser.pugx.org/laravel-bridge/scratch/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel-bridge/scratch"><img src="https://poser.pugx.org/laravel-bridge/scratch/license" alt="License"></a>
 </p>
 
 Start Laravel project from scratch.
@@ -87,6 +89,11 @@ Template example [view.blade.php](/examples/view/view.blade.php):
     {{ $row }}
 @endforeach
 ```
+
+## Example projects
+
+* [Schemarkdown](https://github.com/MilesChou/schemarkdown)
+* [Laravel Eloquent Generator](https://github.com/104corp/laravel-eloquent-generator)
 
 ## Thanks
 
