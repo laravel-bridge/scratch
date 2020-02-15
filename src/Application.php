@@ -12,7 +12,9 @@ use Illuminate\Support\ServiceProvider;
 
 class Application extends LaravelContainer
 {
-    use Concerns\SetupLaravel;
+    use Concerns\SetupDatabase;
+    use Concerns\SetupTranslator;
+    use Concerns\SetupView;
 
     /**
      * @var boolean
@@ -152,6 +154,51 @@ class Application extends LaravelContainer
         }
 
         return php_sapi_name() === 'cli' || php_sapi_name() === 'phpdbg';
+    }
+
+    /**
+     * @param bool $is
+     * @return static
+     */
+    public function setupRunningInConsole($is = true): Application
+    {
+        $this['runningInConsole'] = $is;
+
+        return $this;
+    }
+
+    /**
+     * Setup user define provider.
+     *
+     * @param callable $callable The callable can return the instance of ServiceProvider
+     * @return static
+     */
+    public function setupCallableProvider(callable $callable)
+    {
+        return $this->setupServiceProvider($callable($this));
+    }
+
+    /**
+     * Setup service provider.
+     *
+     * @param ServiceProvider|string $serviceProvider
+     * @return static
+     */
+    public function setupServiceProvider($serviceProvider)
+    {
+        if (is_string($serviceProvider) && class_exists($serviceProvider)) {
+            $serviceProvider = new $serviceProvider($this);
+        }
+
+        if (!$serviceProvider instanceof ServiceProvider) {
+            throw new \RuntimeException('Argument $serviceProvider must extend ServiceProvider');
+        }
+
+        $serviceProvider->register();
+
+        $this->serviceProviders[] = $serviceProvider;
+
+        return $this;
     }
 
     /**
