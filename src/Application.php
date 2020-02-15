@@ -15,6 +15,7 @@ class Application extends LaravelContainer
     use Concerns\SetupDatabase;
     use Concerns\SetupTranslator;
     use Concerns\SetupView;
+    use Concerns\Workaround;
 
     /**
      * @var boolean
@@ -135,36 +136,6 @@ class Application extends LaravelContainer
         parent::flush();
 
         $this->serviceProviders = [];
-    }
-
-    /**
-     * For workaround
-     *
-     * @return bool
-     * @see https://github.com/laravel/framework/blob/v6.13.1/src/Illuminate/Foundation/Application.php#L559
-     */
-    public function runningInConsole(): bool
-    {
-        if (isset($this['runningInConsole'])) {
-            return (bool)$this['runningInConsole'];
-        }
-
-        if (isset($_ENV['APP_RUNNING_IN_CONSOLE'])) {
-            return $_ENV['APP_RUNNING_IN_CONSOLE'] === 'true';
-        }
-
-        return php_sapi_name() === 'cli' || php_sapi_name() === 'phpdbg';
-    }
-
-    /**
-     * @param bool $is
-     * @return static
-     */
-    public function setupRunningInConsole($is = true): Application
-    {
-        $this['runningInConsole'] = $is;
-
-        return $this;
     }
 
     /**
