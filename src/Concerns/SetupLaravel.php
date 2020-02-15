@@ -13,42 +13,6 @@ use PDO;
 trait SetupLaravel
 {
     /**
-     * Setup all LaravelProvider.
-     */
-    protected function setupLaravelProviders(): void
-    {
-        collect([
-            'Illuminate\Auth\AuthServiceProvider',
-            'Illuminate\Broadcasting\BroadcastServiceProvider',
-            'Illuminate\Bus\BusServiceProvider',
-            'Illuminate\Cache\CacheServiceProvider',
-            'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-            'Illuminate\Cookie\CookieServiceProvider',
-            'Illuminate\Database\DatabaseServiceProvider',
-            'Illuminate\Events\EventServiceProvider',
-            'Illuminate\Encryption\EncryptionServiceProvider',
-            'Illuminate\Filesystem\FilesystemServiceProvider',
-            'Illuminate\Foundation\Providers\FoundationServiceProvider',
-            'Illuminate\Hashing\HashServiceProvider',
-            'Illuminate\Mail\MailServiceProvider',
-            'Illuminate\Notifications\NotificationServiceProvider',
-            'Illuminate\Pagination\PaginationServiceProvider',
-            'Illuminate\Pipeline\PipelineServiceProvider',
-            'Illuminate\Queue\QueueServiceProvider',
-            'Illuminate\Redis\RedisServiceProvider',
-            'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
-            'Illuminate\Session\SessionServiceProvider',
-            'Illuminate\Translation\TranslationServiceProvider',
-            'Illuminate\Validation\ValidationServiceProvider',
-            'Illuminate\View\ViewServiceProvider',
-        ])->filter(function ($provider) {
-            return class_exists($provider);
-        })->each(function ($provider) {
-            $this->register($provider);
-        });
-    }
-
-    /**
      * Setup user define provider.
      *
      * @param callable $callable The callable can return the instance of ServiceProvider
@@ -56,31 +20,23 @@ trait SetupLaravel
      */
     public function setupCallableProvider(callable $callable)
     {
-        /** @var ServiceProvider $serviceProvider */
-        $serviceProvider = $callable($this, $this['config']);
-        $serviceProvider->register();
-
-        $this->serviceProviders[] = $serviceProvider;
-
-        return $this;
+        return $this->setupServiceProvider($callable($this));
     }
 
     /**
      * Setup service provider.
      *
-     * @param string $class
+     * @param ServiceProvider|string $serviceProvider
      * @return static
      */
-    public function setupProvider(string $class)
+    public function setupServiceProvider($serviceProvider)
     {
-        if (!class_exists($class)) {
-            throw new \RuntimeException('Class: ' . $class . ' is not Exist');
+        if (is_string($serviceProvider) && class_exists($serviceProvider)) {
+            $serviceProvider = new $serviceProvider($this);
         }
 
-        $serviceProvider = new $class($this);
-
         if (!$serviceProvider instanceof ServiceProvider) {
-            throw new \RuntimeException('Class: ' . $class . ' must extend ServiceProvider');
+            throw new \RuntimeException('Argument $serviceProvider must extend ServiceProvider');
         }
 
         $serviceProvider->register();

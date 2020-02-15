@@ -66,9 +66,9 @@ class ApplicationTest extends TestCase
     public function testSetupCallableProvider(): void
     {
         $this->target->setupRunningInConsole(false)
-            ->setupCallableProvider(function ($app, $config) {
-                $config['view.paths'] = [__DIR__];
-                $config['view.compiled'] = __DIR__;
+            ->setupCallableProvider(function ($app) {
+                $app['config']['view.paths'] = [__DIR__];
+                $app['config']['view.compiled'] = __DIR__;
 
                 return new ViewServiceProvider($app);
             });

@@ -153,4 +153,40 @@ class Application extends LaravelContainer
 
         return php_sapi_name() === 'cli' || php_sapi_name() === 'phpdbg';
     }
+
+    /**
+     * Setup all LaravelProvider.
+     */
+    protected function setupLaravelProviders(): void
+    {
+        collect([
+            'Illuminate\Auth\AuthServiceProvider',
+            'Illuminate\Broadcasting\BroadcastServiceProvider',
+            'Illuminate\Bus\BusServiceProvider',
+            'Illuminate\Cache\CacheServiceProvider',
+            'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
+            'Illuminate\Cookie\CookieServiceProvider',
+            'Illuminate\Database\DatabaseServiceProvider',
+            'Illuminate\Events\EventServiceProvider',
+            'Illuminate\Encryption\EncryptionServiceProvider',
+            'Illuminate\Filesystem\FilesystemServiceProvider',
+            'Illuminate\Foundation\Providers\FoundationServiceProvider',
+            'Illuminate\Hashing\HashServiceProvider',
+            'Illuminate\Mail\MailServiceProvider',
+            'Illuminate\Notifications\NotificationServiceProvider',
+            'Illuminate\Pagination\PaginationServiceProvider',
+            'Illuminate\Pipeline\PipelineServiceProvider',
+            'Illuminate\Queue\QueueServiceProvider',
+            'Illuminate\Redis\RedisServiceProvider',
+            'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
+            'Illuminate\Session\SessionServiceProvider',
+            'Illuminate\Translation\TranslationServiceProvider',
+            'Illuminate\Validation\ValidationServiceProvider',
+            'Illuminate\View\ViewServiceProvider',
+        ])->filter(function ($provider) {
+            return class_exists($provider);
+        })->each(function ($provider) {
+            $this->register($provider);
+        });
+    }
 }
