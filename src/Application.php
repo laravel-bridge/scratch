@@ -106,7 +106,7 @@ class Application extends LaravelContainer
         }
 
         if (is_string($provider)) {
-            $provider = $provider = new $provider($this);
+            $provider = new $provider($this);
         }
 
         $provider->register();
@@ -144,30 +144,9 @@ class Application extends LaravelContainer
      * @param callable $callable The callable can return the instance of ServiceProvider
      * @return static
      */
-    public function setupCallableProvider(callable $callable)
+    public function setupCallableProvider(callable $callable): Application
     {
-        return $this->setupServiceProvider($callable($this));
-    }
-
-    /**
-     * Setup service provider.
-     *
-     * @param ServiceProvider|string $serviceProvider
-     * @return static
-     */
-    public function setupServiceProvider($serviceProvider)
-    {
-        if (is_string($serviceProvider) && class_exists($serviceProvider)) {
-            $serviceProvider = new $serviceProvider($this);
-        }
-
-        if (!$serviceProvider instanceof ServiceProvider) {
-            throw new \RuntimeException('Argument $serviceProvider must extend ServiceProvider');
-        }
-
-        $serviceProvider->register();
-
-        $this->serviceProviders[] = $serviceProvider;
+        $this->register($callable($this));
 
         return $this;
     }
