@@ -90,6 +90,38 @@ Template example [view.blade.php](/examples/view/view.blade.php):
 @endforeach
 ```
 
+### Logging
+
+> Require `illuminate/log` and `illuminate/events`
+
+Method `setupLogger()` has 3 arguments, the following is signature:
+
+```php
+public function setupLogger(string $name, LoggerInterface $logger, bool $default = true);
+```
+
+`$name` is the Log name, and use Facade `Log::driver($name)` to specify.
+
+`$logger` is the instance implemented [`Psr\Log\LoggerInterface`](https://www.php-fig.org/psr/psr-3/).
+
+`$default` will set the default log driver if true.
+
+Here is a testing example:
+
+```php
+$spy = new TestHandler();
+
+$logger = new Monolog\Logger('test');
+$logger->pushHandler($spy);
+
+$this->target->setupLogger('test', $logger)
+    ->bootstrap();
+
+Log::info('log_test');
+
+$this->assertTrue($spy->hasInfoRecords());
+```
+
 ## Example projects
 
 * [Schemarkdown](https://github.com/MilesChou/schemarkdown)

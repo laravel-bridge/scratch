@@ -3,12 +3,14 @@
 namespace Tests\Scratch;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\ViewServiceProvider;
 use LaravelBridge\Scratch\Application;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use Psr\Container\NotFoundExceptionInterface;
-use Recca0120\LaravelBridge\Laravel;
 use Tests\TestCase;
 
 class ApplicationTest extends TestCase
@@ -89,5 +91,23 @@ class ApplicationTest extends TestCase
         $actual = View::make('lang_test')->render();
 
         $this->assertSame('bar', $actual);
+    }
+
+    public function testLog(): void
+    {
+        $spy = new TestHandler();
+
+        $logger = new Logger('test');
+        $logger->pushHandler($spy);
+
+        $this->target
+            ->setupRunningInConsole(false)
+            ->setupView(__DIR__, __DIR__)
+            ->setupLogger('test', $logger)
+            ->bootstrap();
+
+        Log::info('log_test');
+
+        $this->assertTrue($spy->hasInfoRecords());
     }
 }

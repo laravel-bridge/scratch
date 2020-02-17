@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 class Application extends LaravelContainer
 {
     use Concerns\SetupDatabase;
+    use Concerns\SetupLog;
     use Concerns\SetupTranslator;
     use Concerns\SetupView;
     use Concerns\Workaround;
@@ -30,7 +31,7 @@ class Application extends LaravelContainer
     public function __construct()
     {
         $this->instance(LaravelContainer::class, $this);
-        $this->instance('config', new Fluent());
+        $this->instance('config', new Fluent($this->defaultConfig()));
 
         if (class_exists(Request::class)) {
             $this->singleton('request', function () {
@@ -169,6 +170,7 @@ class Application extends LaravelContainer
             'Illuminate\Filesystem\FilesystemServiceProvider',
             'Illuminate\Foundation\Providers\FoundationServiceProvider',
             'Illuminate\Hashing\HashServiceProvider',
+            'Illuminate\Log\LogServiceProvider',
             'Illuminate\Mail\MailServiceProvider',
             'Illuminate\Notifications\NotificationServiceProvider',
             'Illuminate\Pagination\PaginationServiceProvider',

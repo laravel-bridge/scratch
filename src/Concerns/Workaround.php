@@ -2,12 +2,28 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
+use Monolog\Handler\NullHandler;
+
 trait Workaround
 {
     /**
      * @var bool|null
      */
     private $isRunningInConsole;
+
+    /**
+     * @return array
+     */
+    private function defaultConfig(): array
+    {
+        return [
+            'logging.channels.null' => [
+                'driver' => 'monolog',
+                'handler' => NullHandler::class,
+            ],
+            'logging.default' => 'null',
+        ];
+    }
 
     /**
      * @return bool
