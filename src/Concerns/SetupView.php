@@ -20,12 +20,6 @@ trait SetupView
         $this['config']['view.paths'] = is_array($viewPath) ? $viewPath : [$viewPath];
         $this['config']['view.compiled'] = $compiledPath;
 
-        // Binding default concrete
-        $this->bind(Factory::class, 'view');
-
-        // Set the default concrete for View Factory
-        $this->bind(FactoryContract::class, Factory::class);
-
         $this->alias('View', Facades\View::class);
 
         return $this;

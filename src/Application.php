@@ -3,12 +3,17 @@
 namespace LaravelBridge\Scratch;
 
 use Illuminate\Container\Container as LaravelContainer;
+use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
+use Illuminate\Log\LogManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Factory as ViewFactory;
+use Psr\Log\LoggerInterface;
 
 class Application extends LaravelContainer
 {
@@ -44,6 +49,7 @@ class Application extends LaravelContainer
         }
 
         $this->setupLaravelProviders();
+        $this->setupLaravelBinding();
     }
 
     /**
@@ -198,5 +204,33 @@ class Application extends LaravelContainer
         })->each(function ($provider) {
             $this->register($provider);
         });
+    }
+
+    /**
+     * Setup all LaravelProvider.
+     */
+    protected function setupLaravelBinding(): void
+    {
+        if ($this->has('events')) {
+            $this->bind(Dispatcher::class, 'files');
+        }
+
+        if ($this->has('files')) {
+            $this->bind(Filesystem::class, 'files');
+        }
+
+        if ($this->has('log')) {
+            $this->bind(LogManager::class, 'log');
+            $this->bind(LoggerInterface::class, LogManager::class);
+        }
+
+        if ($this->has('request')) {
+            $this->bind(Request::class, 'request');
+        }
+
+        if ($this->has('view')) {
+            $this->bind(ViewFactory::class, 'view');
+            $this->bind(ViewFactoryContract::class, ViewFactory::class);
+        }
     }
 }
