@@ -39,6 +39,9 @@ trait SetupLog
 
         $this->setupLoggerConfig($name, $default);
 
+        // Binding default concrete
+        $this->bind(LogManager::class, 'log');
+
         // Set the default concrete for PSR-3 interface
         $this->bind(LoggerInterface::class, LogManager::class);
 
