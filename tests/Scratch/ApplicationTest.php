@@ -103,7 +103,7 @@ class ApplicationTest extends TestCase
         $this->target
             ->setupRunningInConsole(false)
             ->setupView(__DIR__, __DIR__)
-            ->setupLogger('test', $logger)
+            ->setupLogger('test', $logger, true)
             ->bootstrap();
 
         Log::info('log_test');

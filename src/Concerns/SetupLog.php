@@ -18,7 +18,7 @@ trait SetupLog
      * @param bool $default
      * @return static
      */
-    public function setupLogger(string $name, LoggerInterface $logger, bool $default = true)
+    public function setupLogger(string $name, LoggerInterface $logger, bool $default = false)
     {
         return $this->setupLoggerProvider($name, function () use ($logger) {
             return $logger;
@@ -31,7 +31,7 @@ trait SetupLog
      * @param bool $default
      * @return static
      */
-    public function setupLoggerProvider(string $name, Closure $provider, bool $default = true)
+    public function setupLoggerProvider(string $name, Closure $provider, bool $default = false)
     {
         $this->extend('log', function (LogManager $instance) use ($name, $provider) {
             return $instance->extend($name, $provider);
@@ -57,7 +57,7 @@ trait SetupLog
      * @param bool $default
      * @return static
      */
-    public function setupLoggerConfig(string $name, bool $default = true)
+    public function setupLoggerConfig(string $name, bool $default = false)
     {
         if ($default) {
             $this['config']['logging.default'] = $name;
