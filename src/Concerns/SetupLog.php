@@ -5,7 +5,6 @@ namespace LaravelBridge\Scratch\Concerns;
 use Closure;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades;
-use Monolog\Handler\Handler;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,16 +37,28 @@ trait SetupLog
             return $instance->extend($name, $provider);
         });
 
-        $this['config']["logging.channels.{$name}"] = [
-            'driver' => $name,
-        ];
-
-        if ($default) {
-            $this['config']['logging.default'] = $name;
-        }
+        $this->setupLoggerConfig($name, $default);
 
         if (!$this->isAlias(Facades\Log::class)) {
             $this->alias('Log', Facades\Log::class);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param bool $default
+     * @return static
+     */
+    public function setupLoggerConfig(string $name, bool $default = true)
+    {
+        $this['config']['logging.default'] = $name;
+
+        if ($default) {
+            $this['config']["logging.channels.{$name}"] = [
+                'driver' => $name,
+            ];
         }
 
         return $this;
