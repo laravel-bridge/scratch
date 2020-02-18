@@ -147,7 +147,18 @@ class Application extends LaravelContainer
      */
     public function setupCallableProvider(callable $callable): Application
     {
-        $this->register($callable($this));
+        return $this->setupProvider($callable($this));
+    }
+
+    /**
+     * Setup user define provider.
+     *
+     * @param ServiceProvider|string $provider
+     * @return static
+     */
+    public function setupProvider($provider): Application
+    {
+        $this->register($provider);
 
         return $this;
     }
