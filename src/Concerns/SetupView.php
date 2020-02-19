@@ -2,9 +2,7 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
-use Illuminate\Contracts\View\Factory as FactoryContract;
 use Illuminate\Support\Facades;
-use Illuminate\View\Factory;
 use LaravelBridge\Scratch\Application;
 
 trait SetupView
