@@ -36,6 +36,10 @@ class Application extends LaravelContainer
 
     public function __construct()
     {
+        // Binding self
+        $this->instance(__CLASS__, $this);
+
+        // Binding basic service for Laravel
         $this->instance(LaravelContainer::class, $this);
         $this->instance('config', new Fluent($this->defaultConfig()));
 
