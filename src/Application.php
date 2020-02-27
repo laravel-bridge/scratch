@@ -4,6 +4,7 @@ namespace LaravelBridge\Scratch;
 
 use Illuminate\Container\Container as LaravelContainer;
 use Illuminate\Contracts\View\Factory as ViewFactoryContract;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
@@ -212,7 +213,8 @@ class Application extends LaravelContainer
     protected function setupLaravelBinding(): void
     {
         if ($this->has('events')) {
-            $this->bind(Dispatcher::class, 'files');
+            $this->bind(Dispatcher::class, 'events');
+            $this->bind(DispatcherContract::class, 'events');
         }
 
         if ($this->has('files')) {
@@ -230,7 +232,7 @@ class Application extends LaravelContainer
 
         if ($this->has('view')) {
             $this->bind(ViewFactory::class, 'view');
-            $this->bind(ViewFactoryContract::class, ViewFactory::class);
+            $this->bind(ViewFactoryContract::class, 'view');
         }
     }
 }
