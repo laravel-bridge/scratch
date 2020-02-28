@@ -3,17 +3,17 @@
 namespace LaravelBridge\Scratch;
 
 use Illuminate\Container\Container as LaravelContainer;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory as ViewFactory;
+use LaravelBridge\Scratch\Bootstrap\LoadConfiguration;
 use Psr\Log\LoggerInterface;
 
 class Application extends LaravelContainer
@@ -25,6 +25,11 @@ class Application extends LaravelContainer
     use Concerns\Workaround;
 
     /**
+     * @var string|null
+     */
+    private $basePath;
+
+    /**
      * @var boolean
      */
     private $booted = false;
@@ -34,14 +39,24 @@ class Application extends LaravelContainer
      */
     private $serviceProviders = [];
 
-    public function __construct()
+    /**
+     * Application constructor.
+     *
+     * @param string|null $basePath
+     */
+    public function __construct($basePath = null)
     {
+        if ($basePath) {
+            $this->basePath = $basePath;
+
+            $this->bindPathsInContainer();
+        }
+
         // Binding self
         $this->instance(__CLASS__, $this);
 
         // Binding basic service for Laravel
         $this->instance(LaravelContainer::class, $this);
-        $this->instance('config', new Fluent($this->defaultConfig()));
 
         if (class_exists(Request::class)) {
             $this->singleton('request', function () {
@@ -55,6 +70,8 @@ class Application extends LaravelContainer
 
         $this->setupLaravelProviders();
         $this->setupLaravelBinding();
+
+        (new LoadConfiguration())->bootstrap($this);
     }
 
     /**
@@ -177,7 +194,7 @@ class Application extends LaravelContainer
     /**
      * Setup all LaravelProvider.
      */
-    protected function setupLaravelProviders(): void
+    private function setupLaravelProviders(): void
     {
         collect([
             'Illuminate\Auth\AuthServiceProvider',
@@ -214,7 +231,7 @@ class Application extends LaravelContainer
     /**
      * Setup all LaravelProvider.
      */
-    protected function setupLaravelBinding(): void
+    private function setupLaravelBinding(): void
     {
         if ($this->has('events')) {
             $this->bind(Dispatcher::class, 'events');
@@ -238,5 +255,11 @@ class Application extends LaravelContainer
             $this->bind(ViewFactory::class, 'view');
             $this->bind(ViewFactoryContract::class, 'view');
         }
+    }
+
+    private function bindPathsInContainer(): void
+    {
+        $this->instance('path.base', $this->basePath);
+        $this->instance('path.config', $this->basePath . DIRECTORY_SEPARATOR . 'config');
     }
 }

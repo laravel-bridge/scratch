@@ -12,20 +12,6 @@ trait Workaround
     private $isRunningInConsole;
 
     /**
-     * @return array
-     */
-    private function defaultConfig(): array
-    {
-        return [
-            'logging.channels.null' => [
-                'driver' => 'monolog',
-                'handler' => NullHandler::class,
-            ],
-            'logging.default' => 'null',
-        ];
-    }
-
-    /**
      * @return bool
      * @see https://github.com/laravel/framework/blob/v6.15.1/src/Illuminate/Foundation/Application.php#L559
      */

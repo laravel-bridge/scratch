@@ -10,6 +10,7 @@ use Illuminate\View\ViewServiceProvider;
 use LaravelBridge\Scratch\Application;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use org\bovigo\vfs\vfsStream;
 use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 
@@ -24,7 +25,7 @@ class ApplicationTest extends TestCase
     {
         parent::setUp();
 
-        $this->target = new Application();
+        $this->target = new Application(vfsStream::setup()->url());
     }
 
     protected function tearDown(): void
@@ -32,13 +33,6 @@ class ApplicationTest extends TestCase
         $this->target = null;
 
         parent::tearDown();
-    }
-
-    public function testGetInstanceInContainer(): void
-    {
-        $instance = Application::getInstance();
-
-        $this->assertInstanceOf(Collection::class, $instance->get(Collection::class));
     }
 
     public function testShouldThrowExceptionWhenGetNotExistClass(): void
