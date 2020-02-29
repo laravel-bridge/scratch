@@ -122,6 +122,13 @@ Log::info('log_test');
 $this->assertTrue($spy->hasInfoRecords());
 ```
 
+## Configuration
+
+The configuration will use `illuminate/config` package. Following is the priority.
+
+1. Setup method config or setup step
+2. Configuration Loader or bootstrap step
+
 ## Example projects
 
 * [Schemarkdown](https://github.com/MilesChou/schemarkdown)
