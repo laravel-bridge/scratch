@@ -15,8 +15,10 @@ trait SetupView
      */
     public function setupView($viewPath, $compiledPath): Application
     {
-        $this['config']['view.paths'] = is_array($viewPath) ? $viewPath : [$viewPath];
-        $this['config']['view.compiled'] = $compiledPath;
+        $this->setupConfigs([
+            'view.compiled' => $compiledPath,
+            'view.paths' => is_array($viewPath) ? $viewPath : [$viewPath],
+        ]);
 
         $this->alias('View', Facades\View::class);
 

@@ -2,7 +2,6 @@
 
 namespace Tests\Scratch;
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Factory as ViewFactory;
@@ -10,7 +9,6 @@ use Illuminate\View\ViewServiceProvider;
 use LaravelBridge\Scratch\Application;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use org\bovigo\vfs\vfsStream;
 use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 
@@ -25,7 +23,7 @@ class ApplicationTest extends TestCase
     {
         parent::setUp();
 
-        $this->target = new Application(vfsStream::setup()->url());
+        $this->target = new Application(dirname(__DIR__) . '/Fixture');
     }
 
     protected function tearDown(): void
@@ -103,5 +101,39 @@ class ApplicationTest extends TestCase
         Log::info('log_test');
 
         $this->assertTrue($spy->hasInfoRecords());
+    }
+
+    public function testSetupConfig(): void
+    {
+        $this->target
+            ->setupRunningInConsole(false)
+            ->setupConfig('foo', 'bar')
+            ->setupView(__DIR__, __DIR__)
+            ->bootstrap();
+
+        $this->assertSame('bar', $this->target['config']['foo']);
+    }
+
+    public function testConfigurationLoader(): void
+    {
+        $this->target
+            ->setupRunningInConsole(false)
+            ->useConfigurationLoader()
+            ->setupView(__DIR__, __DIR__)
+            ->bootstrap();
+
+        $this->assertSame('baz', $this->target['config']['foo.bar']);
+    }
+
+    public function testConfigurationLoaderWillUseMethodConfigFirst(): void
+    {
+        $this->target
+            ->setupRunningInConsole(false)
+            ->useConfigurationLoader()
+            ->setupView(__DIR__, __DIR__)
+            ->setupConfig('foo', ['bar' => 'from-setup'])
+            ->bootstrap();
+
+        $this->assertSame('from-setup', $this->target['config']['foo.bar']);
     }
 }

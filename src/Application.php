@@ -2,6 +2,7 @@
 
 namespace LaravelBridge\Scratch;
 
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container as LaravelContainer;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Contracts\View\Factory as ViewFactoryContract;
@@ -13,16 +14,29 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory as ViewFactory;
-use LaravelBridge\Scratch\Bootstrap\LoadConfiguration;
+use Monolog\Handler\NullHandler;
 use Psr\Log\LoggerInterface;
 
 class Application extends LaravelContainer
 {
+    use Concerns\Bootstrapper;
     use Concerns\SetupDatabase;
     use Concerns\SetupLog;
     use Concerns\SetupTranslator;
     use Concerns\SetupView;
     use Concerns\Workaround;
+
+    private const DEFAULT_CONFIG = [
+        'logging' => [
+            'channels' => [
+                'null' => [
+                    'driver' => 'monolog',
+                    'handler' => NullHandler::class,
+                ],
+            ],
+            'default' => 'null',
+        ],
+    ];
 
     /**
      * @var string|null
@@ -55,8 +69,11 @@ class Application extends LaravelContainer
         // Binding self
         $this->instance(__CLASS__, $this);
 
-        // Binding basic service for Laravel
+        // Binding base container to self
         $this->instance(LaravelContainer::class, $this);
+
+        // Initialize Config
+        $this->instance('config', new Repository(static::DEFAULT_CONFIG));
 
         if (class_exists(Request::class)) {
             $this->singleton('request', function () {
@@ -70,8 +87,6 @@ class Application extends LaravelContainer
 
         $this->setupLaravelProviders();
         $this->setupLaravelBinding();
-
-        (new LoadConfiguration())->bootstrap($this);
     }
 
     /**
@@ -82,6 +97,11 @@ class Application extends LaravelContainer
         if ($this->booted) {
             return $this;
         }
+
+        // Run bootstrapper
+        collect($this->bootstrappers)->each(function ($bootstrapper) {
+            $this->make($bootstrapper)->bootstrap($this);
+        });
 
         // Set the global instance
         LaravelContainer::setInstance($this);
@@ -164,6 +184,7 @@ class Application extends LaravelContainer
     {
         parent::flush();
 
+        $this->bootstrappers = [];
         $this->serviceProviders = [];
     }
 
@@ -176,6 +197,31 @@ class Application extends LaravelContainer
     public function setupCallableProvider(callable $callable): Application
     {
         return $this->setupProvider($callable($this));
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return Application
+     */
+    public function setupConfig(string $key, $value): Application
+    {
+        $this['config'][$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param array $config
+     * @return Application
+     */
+    public function setupConfigs(array $config): Application
+    {
+        foreach ($config as $key => $value) {
+            $this->setupConfig($key, $value);
+        }
+
+        return $this;
     }
 
     /**

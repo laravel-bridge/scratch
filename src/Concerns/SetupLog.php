@@ -54,12 +54,12 @@ trait SetupLog
     public function setupLoggerConfig(string $name, bool $default = false)
     {
         if ($default) {
-            $this['config']['logging.default'] = $name;
+            $this->setupConfig('logging.default', $name);
         }
 
-        $this['config']["logging.channels.{$name}"] = [
+        $this->setupConfig("logging.channels.{$name}", [
             'driver' => $name,
-        ];
+        ]);
 
         return $this;
     }

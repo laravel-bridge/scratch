@@ -1,39 +1,33 @@
 <?php
 
-namespace LaravelBridge\Scratch\Bootstrap;
+namespace LaravelBridge\Scratch\Bootstrapper;
 
 use Illuminate\Config\Repository;
 use LaravelBridge\Scratch\Application;
 use LaravelBridge\Scratch\Contracts\Bootstrapper;
-use Monolog\Handler\NullHandler;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @see https://github.com/laravel/framework/blob/v6.17.1/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php
  */
-class LoadConfiguration implements Bootstrapper
+class ConfigurationLoader implements Bootstrapper
 {
-    private const DEFAULT_CONFIG = [
-        'logging' => [
-            'channels' => [
-                'null' => [
-                    'driver' => 'monolog',
-                    'handler' => NullHandler::class,
-                ],
-            ],
-            'default' => 'null',
-        ],
-    ];
-
     public function bootstrap(Application $app): void
     {
-        $app->instance('config', $config = new Repository(static::DEFAULT_CONFIG));
+        /** @var Repository $config */
+        $config = $app->make('config');
+
+        $app->instance('config', new Repository());
 
         $files = $this->getConfigurationFiles($app);
 
         foreach ($files as $key => $path) {
-            $config->set($key, require $path);
+            $app['config']->set($key, require $path);
+        }
+
+        foreach ($config->all() as $key => $item) {
+            $app['config']->set($key, $item);
         }
 
         date_default_timezone_set($config->get('app.timezone', 'UTC'));

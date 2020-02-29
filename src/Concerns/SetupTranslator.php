@@ -13,9 +13,7 @@ trait SetupTranslator
      */
     public function setupLocale($locale): Application
     {
-        $this['config']['app.locale'] = $locale;
-
-        return $this;
+        return $this->setupConfig('app.locale', $locale);
     }
 
     /**

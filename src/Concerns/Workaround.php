@@ -2,8 +2,6 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
-use Monolog\Handler\NullHandler;
-
 trait Workaround
 {
     /**
