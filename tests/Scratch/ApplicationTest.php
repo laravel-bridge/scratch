@@ -42,7 +42,7 @@ class ApplicationTest extends TestCase
 
     public function testCheckInstanceInContainer(): void
     {
-        $this->target->setupView(__DIR__, __DIR__);
+        $this->target->setupView(__DIR__, $this->vfs->url());
 
         $this->assertTrue($this->target->has('view'));
         $this->assertFalse($this->target->has('whatever'));
@@ -51,7 +51,7 @@ class ApplicationTest extends TestCase
     public function testInstance(): void
     {
         $this->target->setupRunningInConsole(false)
-            ->setupView(__DIR__, __DIR__)
+            ->setupView(__DIR__, $this->vfs->url())
             ->bootstrap();
 
         $this->assertInstanceOf(ViewFactory::class, $this->target->make('view'));
@@ -62,7 +62,7 @@ class ApplicationTest extends TestCase
         $this->target->setupRunningInConsole(false)
             ->setupCallableProvider(function ($app) {
                 $app['config']['view.paths'] = [__DIR__];
-                $app['config']['view.compiled'] = __DIR__;
+                $app['config']['view.compiled'] = $this->vfs->url();
 
                 return new ViewServiceProvider($app);
             });
@@ -77,7 +77,7 @@ class ApplicationTest extends TestCase
         $this->target->setupLocale('en')
             ->setupRunningInConsole(false)
             ->setupTranslator($this->resourcePath('lang'))
-            ->setupView($this->resourcePath('views'), $this->storagePath('framework/views'))
+            ->setupView($this->resourcePath('views'), $this->vfs->url())
             ->bootstrap();
 
         $actual = View::make('lang_test')->render();
@@ -94,7 +94,7 @@ class ApplicationTest extends TestCase
 
         $this->target
             ->setupRunningInConsole(false)
-            ->setupView(__DIR__, __DIR__)
+            ->setupView(__DIR__, $this->vfs->url())
             ->setupLogger('test', $logger, true)
             ->bootstrap();
 
@@ -108,7 +108,7 @@ class ApplicationTest extends TestCase
         $this->target
             ->setupRunningInConsole(false)
             ->setupConfig('foo', 'bar')
-            ->setupView(__DIR__, __DIR__)
+            ->setupView(__DIR__, $this->vfs->url())
             ->bootstrap();
 
         $this->assertSame('bar', $this->target['config']['foo']);
@@ -119,7 +119,7 @@ class ApplicationTest extends TestCase
         $this->target
             ->setupRunningInConsole(false)
             ->useConfigurationLoader()
-            ->setupView(__DIR__, __DIR__)
+            ->setupView(__DIR__, $this->vfs->url())
             ->bootstrap();
 
         $this->assertSame('baz', $this->target['config']['foo.bar']);
@@ -130,7 +130,7 @@ class ApplicationTest extends TestCase
         $this->target
             ->setupRunningInConsole(false)
             ->useConfigurationLoader()
-            ->setupView(__DIR__, __DIR__)
+            ->setupView(__DIR__, $this->vfs->url())
             ->setupConfig('foo', ['bar' => 'from-setup'])
             ->bootstrap();
 
