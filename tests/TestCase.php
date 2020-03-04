@@ -34,11 +34,4 @@ class TestCase extends BaseTestCase
 
         return $defaultPath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
-
-    protected function storagePath(string $path = ''): string
-    {
-        $defaultPath = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR . 'storage';
-
-        return $defaultPath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
-    }
 }
