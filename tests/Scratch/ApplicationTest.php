@@ -2,6 +2,7 @@
 
 namespace Tests\Scratch;
 
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Factory as ViewFactory;
@@ -31,6 +32,20 @@ class ApplicationTest extends TestCase
         $this->target = null;
 
         parent::tearDown();
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnSameInstanceWhenCreateFromBaseContainer(): void
+    {
+        $container = new Container();
+        $container->instance('foo', 'foo');
+
+        $target = Application::createFromBase($container);
+
+        $this->assertSame('foo', $container->get('foo'));
+        $this->assertSame('foo', $target->get('foo'));
     }
 
     public function testShouldThrowExceptionWhenGetNotExistClass(): void

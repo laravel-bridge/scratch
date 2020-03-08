@@ -53,6 +53,19 @@ class Application extends LaravelContainer
      */
     private $serviceProviders = [];
 
+    public static function createFromBase(LaravelContainer $container): Application
+    {
+        $instance = new self();
+
+        $instance->aliases = $container->aliases;
+        $instance->resolved = $container->resolved;
+        $instance->bindings = $container->bindings;
+        $instance->instances = $container->instances;
+        $instance->abstractAliases = $container->abstractAliases;
+
+        return $instance;
+    }
+
     /**
      * Application constructor.
      *
