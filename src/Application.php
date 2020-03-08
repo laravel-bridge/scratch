@@ -61,11 +61,11 @@ class Application extends LaravelContainer
 
         $instance = new self();
 
-        $instance->aliases = $container->aliases;
-        $instance->resolved = $container->resolved;
-        $instance->bindings = $container->bindings;
-        $instance->instances = $container->instances;
-        $instance->abstractAliases = $container->abstractAliases;
+        $instance->aliases = array_merge($instance->aliases, $container->aliases);
+        $instance->resolved = array_merge($instance->resolved, $container->aliases);
+        $instance->bindings = array_merge($instance->bindings, $container->bindings);
+        $instance->instances = array_merge($instance->instances, $container->instances);
+        $instance->abstractAliases = array_merge($instance->abstractAliases, $container->abstractAliases);
 
         return $instance;
     }

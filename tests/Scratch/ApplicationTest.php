@@ -2,6 +2,7 @@
 
 namespace Tests\Scratch;
 
+use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
@@ -46,6 +47,7 @@ class ApplicationTest extends TestCase
 
         $this->assertSame('foo', $container->get('foo'));
         $this->assertSame('foo', $target->get('foo'));
+        $this->assertInstanceOf(Repository::class, $target->get('config'));
     }
 
     public function testShouldThrowExceptionWhenGetNotExistClass(): void
