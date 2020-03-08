@@ -55,6 +55,10 @@ class Application extends LaravelContainer
 
     public static function createFromBase(LaravelContainer $container): Application
     {
+        if ($container instanceof self) {
+            return $container;
+        }
+
         $instance = new self();
 
         $instance->aliases = $container->aliases;
