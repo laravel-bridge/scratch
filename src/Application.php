@@ -51,6 +51,12 @@ class Application extends LaravelContainer
      */
     private $serviceProviders = [];
 
+    /**
+     * Create an Application from Laravel container
+     *
+     * @param LaravelContainer $container
+     * @return Application
+     */
     public static function createFromBase(LaravelContainer $container): Application
     {
         if ($container instanceof self) {
