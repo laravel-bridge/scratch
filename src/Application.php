@@ -4,21 +4,16 @@ namespace LaravelBridge\Scratch;
 
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container as LaravelContainer;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
-use Illuminate\Log\LogManager;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Factory as ViewFactory;
 use Monolog\Handler\NullHandler;
-use Psr\Log\LoggerInterface;
 
 class Application extends LaravelContainer
 {
+    use Concerns\BindLaravelService;
+    use Concerns\WithFacades;
     use Concerns\Bootstrapper;
     use Concerns\SetupDatabase;
     use Concerns\SetupLog;
@@ -85,6 +80,7 @@ class Application extends LaravelContainer
 
         // Binding self
         $this->instance(__CLASS__, $this);
+        $this->instance('app', $this);
 
         // Binding base container to self
         $this->instance(LaravelContainer::class, $this);
@@ -103,7 +99,8 @@ class Application extends LaravelContainer
         }
 
         $this->setupLaravelProviders();
-        $this->setupLaravelBinding();
+
+        $this->bindLaravelService();
     }
 
     /**
@@ -122,16 +119,6 @@ class Application extends LaravelContainer
 
         // Set the global instance
         LaravelContainer::setInstance($this);
-
-        // Workaround for testing
-        Facade::clearResolvedInstances();
-        Facade::setFacadeApplication($this);
-
-        foreach ($this->aliases as $class => $alias) {
-            if (!class_exists($alias)) {
-                class_alias($class, $alias);
-            }
-        }
 
         array_walk($this->serviceProviders, function ($provider) {
             if (method_exists($provider, 'boot')) {
@@ -256,10 +243,12 @@ class Application extends LaravelContainer
 
     /**
      * Setup all LaravelProvider.
+     *
+     * @param array $additionProviders
      */
-    private function setupLaravelProviders(): void
+    private function setupLaravelProviders($additionProviders = []): void
     {
-        collect([
+        static $defaultProvider = [
             'Illuminate\Auth\AuthServiceProvider',
             'Illuminate\Broadcasting\BroadcastServiceProvider',
             'Illuminate\Bus\BusServiceProvider',
@@ -284,40 +273,15 @@ class Application extends LaravelContainer
             'Illuminate\Translation\TranslationServiceProvider',
             'Illuminate\Validation\ValidationServiceProvider',
             'Illuminate\View\ViewServiceProvider',
-        ])->filter(function ($provider) {
-            return class_exists($provider);
-        })->each(function ($provider) {
-            $this->register($provider);
-        });
-    }
+        ];
 
-    /**
-     * Setup all LaravelProvider.
-     */
-    private function setupLaravelBinding(): void
-    {
-        if ($this->has('events')) {
-            $this->bind(Dispatcher::class, 'events');
-            $this->bind(DispatcherContract::class, 'events');
-        }
-
-        if ($this->has('files')) {
-            $this->bind(Filesystem::class, 'files');
-        }
-
-        if ($this->has('log')) {
-            $this->bind(LogManager::class, 'log');
-            $this->bind(LoggerInterface::class, LogManager::class);
-        }
-
-        if ($this->has('request')) {
-            $this->bind(Request::class, 'request');
-        }
-
-        if ($this->has('view')) {
-            $this->bind(ViewFactory::class, 'view');
-            $this->bind(ViewFactoryContract::class, 'view');
-        }
+        collect($defaultProvider)
+            ->merge($additionProviders)
+            ->filter(function ($provider) {
+                return class_exists($provider);
+            })->each(function ($provider) {
+                $this->register($provider);
+            });
     }
 
     private function bindPathsInContainer(): void

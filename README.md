@@ -62,7 +62,7 @@ $user->password = 'password';
 
 $user->save();
 
-var_export(User::all()->toArray());
+User::all()->toArray();
 ```
 
 ### View
@@ -77,6 +77,7 @@ use LaravelBridge\Scratch\Application;
 Application::getInstance()
     ->setupTranslator(__DIR__ . '/lang')
     ->setupView(__DIR__, __DIR__ . '/compiled')
+    ->withFacades()
     ->bootstrap();
 
 echo View::make('view', ['rows' => [1, 2, 3]]);
@@ -128,6 +129,16 @@ The configuration will use `illuminate/config` package. Following is the priorit
 
 1. Setup method config or setup step
 2. Configuration Loader or bootstrap step
+
+## Facade
+
+Use `withFacades()` to active Facade and register short class:
+
+```php
+$app->withFacades();
+
+View::make(); // It's works
+```
 
 ## Example Projects or Libraries
 

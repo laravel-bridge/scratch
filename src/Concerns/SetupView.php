@@ -2,7 +2,6 @@
 
 namespace LaravelBridge\Scratch\Concerns;
 
-use Illuminate\Support\Facades;
 use LaravelBridge\Scratch\Application;
 
 trait SetupView
@@ -19,8 +18,6 @@ trait SetupView
             'view.compiled' => $compiledPath,
             'view.paths' => is_array($viewPath) ? $viewPath : [$viewPath],
         ]);
-
-        $this->alias('View', Facades\View::class);
 
         return $this;
     }

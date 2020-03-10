@@ -95,6 +95,7 @@ class ApplicationTest extends TestCase
             ->setupRunningInConsole(false)
             ->setupTranslator($this->resourcePath('lang'))
             ->setupView($this->resourcePath('views'), $this->vfs->url())
+            ->withFacades()
             ->bootstrap();
 
         $actual = View::make('lang_test')->render();
@@ -113,6 +114,8 @@ class ApplicationTest extends TestCase
             ->setupRunningInConsole(false)
             ->setupView(__DIR__, $this->vfs->url())
             ->setupLogger('test', $logger, true)
+            ->withFacades()
+            ->withAliases()
             ->bootstrap();
 
         Log::info('log_test');

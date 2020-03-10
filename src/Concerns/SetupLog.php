@@ -4,7 +4,6 @@ namespace LaravelBridge\Scratch\Concerns;
 
 use Closure;
 use Illuminate\Log\LogManager;
-use Illuminate\Support\Facades;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,10 +37,6 @@ trait SetupLog
         });
 
         $this->setupLoggerConfig($name, $default);
-
-        if (!$this->isAlias(Facades\Log::class)) {
-            $this->alias('Log', Facades\Log::class);
-        }
 
         return $this;
     }
