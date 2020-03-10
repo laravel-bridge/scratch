@@ -97,12 +97,6 @@ class Application extends LaravelContainer
         // Initialize Config
         $this->instance('config', new Repository(static::DEFAULT_CONFIG));
 
-        if (class_exists(Request::class)) {
-            $this->singleton('request', function () {
-                return Request::capture();
-            });
-        }
-
         if (class_exists(Dispatcher::class)) {
             $this->singleton('events', Dispatcher::class);
         }
