@@ -22,6 +22,9 @@ class Application extends LaravelContainer
     use Concerns\Workaround;
 
     private const DEFAULT_CONFIG = [
+        'database' => [
+            'default' => 'default',
+        ],
         'logging' => [
             'channels' => [
                 'null' => [

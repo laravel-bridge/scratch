@@ -11,14 +11,12 @@ class User extends \Illuminate\Database\Eloquent\Model
 }
 
 $connections = [
-    'default' => [
-        'driver' => 'sqlite',
-        'database' => __DIR__ . '/sqlite.db',
-    ],
+    'driver' => 'sqlite',
+    'database' => __DIR__ . '/sqlite.db',
 ];
 
-Application::getInstance()
-    ->setupDatabase($connections)
+$app = Application::getInstance()
+    ->setupDatabaseConfig('default', $connections, true)
     ->bootstrap();
 
 $user = new User();

@@ -27,20 +27,42 @@ Setup when you want to use the package
 
 > Require `illuminate/database` and `illuminate/events`
 
+Method `setupDatabaseConfig()` has 3 arguments, the following is signature:
+
+```php
+public function setupDatabaseConfig(string $name, array $connection, bool $default = false);
+```
+
+`$name` is the database name.
+
+`$connection` is the database config only.
+
+`$default` will set the default log driver if true.
+
+Method `setupDatabaseConfigs()` has 2 arguments, the following is signature:
+
+```php
+public function setupDatabaseConfig(array $connections, string $default = 'default');
+```
+
+`$connections` is the all connections config.
+
+`$default` specify the connection is default.
+
+#### Examples
+
 [index.php](/examples/database/index.php) example for Database:
 
 ```php
 use LaravelBridge\Scratch\Application;
 
 $connections = [
-    'default' => [
-        'driver' => 'sqlite',
-        'database' => __DIR__ . '/sqlite.db',
-    ],
+    'driver' => 'sqlite',
+    'database' => __DIR__ . '/sqlite.db',
 ];
 
-Application::getInstance()
-    ->setupDatabase($connections)
+$app = Application::getInstance()
+    ->setupDatabaseConfig('default', $connections, true)
     ->bootstrap();
 ```
 
@@ -98,7 +120,7 @@ Template example [view.blade.php](/examples/view/view.blade.php):
 Method `setupLogger()` has 3 arguments, the following is signature:
 
 ```php
-public function setupLogger(string $name, LoggerInterface $logger, bool $default = true);
+public function setupLogger(string $name, LoggerInterface $logger, bool $default = false);
 ```
 
 `$name` is the Log name, and use Facade `Log::driver($name)` to specify.
@@ -115,7 +137,7 @@ $spy = new TestHandler();
 $logger = new Monolog\Logger('test');
 $logger->pushHandler($spy);
 
-$this->target->setupLogger('test', $logger)
+$this->target->setupLogger('test', $logger, true)
     ->bootstrap();
 
 Log::info('log_test');

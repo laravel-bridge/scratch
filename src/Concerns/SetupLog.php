@@ -48,13 +48,13 @@ trait SetupLog
      */
     public function setupLoggerConfig(string $name, bool $default = false)
     {
-        if ($default) {
-            $this->setupConfig('logging.default', $name);
-        }
-
         $this->setupConfig("logging.channels.{$name}", [
             'driver' => $name,
         ]);
+
+        if ($default) {
+            $this->setupConfig('logging.default', $name);
+        }
 
         return $this;
     }
