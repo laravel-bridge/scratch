@@ -59,7 +59,6 @@ trait WithFacades
             'Illuminate\Support\Facades\Lang' => 'Lang',
             'Illuminate\Support\Facades\Log' => 'Log',
             'Illuminate\Support\Facades\Queue' => 'Queue',
-            'Illuminate\Support\Facades\Route' => 'Route',
             'Illuminate\Support\Facades\Schema' => 'Schema',
             'Illuminate\Support\Facades\Storage' => 'Storage',
             'Illuminate\Support\Str' => 'Str',

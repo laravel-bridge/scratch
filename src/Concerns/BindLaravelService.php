@@ -28,11 +28,6 @@ trait BindLaravelService
             $this->alias('log', \Psr\Log\LoggerInterface::class);
         }
 
-        if ($this->has('request')) {
-            $this->alias('request', \Illuminate\Http\Request::class);
-            $this->alias('request', \Symfony\Component\HttpFoundation\Request::class);
-        }
-
         if ($this->has('view')) {
             $this->alias('view', \Illuminate\View\Factory::class);
             $this->alias('view', \Illuminate\Contracts\View\Factory::class);
