@@ -129,10 +129,16 @@ The configuration will use `illuminate/config` package. Following is the priorit
 1. Setup method config or setup step
 2. Configuration Loader or bootstrap step
 
-## Example projects
+## Example Projects or Libraries
+
+Projects:
 
 * [Schemarkdown](https://github.com/MilesChou/schemarkdown)
 * [Laravel Eloquent Generator](https://github.com/104corp/laravel-eloquent-generator)
+
+Libraries:
+
+* [Laravel Bridge - Slim](https://github.com/laravel-bridge/slim)
 
 ## Thanks
 
