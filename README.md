@@ -162,6 +162,23 @@ $app->withFacades();
 View::make(); // It's works
 ```
 
+## Bootstrap
+
+Bootstrap is a lifecycle in Laravel [Kernel](https://github.com/laravel/framework/blob/v7.1.0/src/Illuminate/Foundation/Http/Kernel.php#L37-L42). The following is bootstrapper order.
+
+```
+\Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class
+\Illuminate\Foundation\Bootstrap\LoadConfiguration::class
+\Illuminate\Foundation\Bootstrap\HandleExceptions::class
+\Illuminate\Foundation\Bootstrap\RegisterFacades::class
+\Illuminate\Foundation\Bootstrap\RegisterProviders::class
+\Illuminate\Foundation\Bootstrap\BootProviders::class
+```
+
+In Scratch application, we can load config functionally. and use `withFacades()` to register Facade first. finally, call `ServiceProvider::register()` on every provider when call `bootstrap()`. Next, call `ServiceProvider::boot()` on every provider, just like Laravel Kernel.
+
+`bootstrap()` has an argument `$withAllLaravelProviders`, register all laravel provider when true. Also, It's default true. 
+
 ## Example Projects or Libraries
 
 Projects:
