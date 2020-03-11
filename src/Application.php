@@ -5,7 +5,6 @@ namespace LaravelBridge\Scratch;
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container as LaravelContainer;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Monolog\Handler\NullHandler;
