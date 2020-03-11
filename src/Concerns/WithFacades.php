@@ -68,7 +68,9 @@ trait WithFacades
         ];
 
         foreach (array_merge($defaults, $customAliases) as $original => $alias) {
-            class_alias($original, $alias);
+            if (class_exists($original)) {
+                class_alias($original, $alias);
+            }
         }
 
         return $this;
