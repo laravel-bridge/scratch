@@ -100,19 +100,20 @@ class Application extends LaravelContainer
         if (class_exists(Dispatcher::class)) {
             $this->singleton('events', Dispatcher::class);
         }
-
-        $this->setupLaravelProviders();
-
-        $this->bindLaravelService();
     }
 
     /**
+     * @param bool $withAllLaravelProviders
      * @return Application
      */
-    public function bootstrap(): Application
+    public function bootstrap($withAllLaravelProviders = true): Application
     {
         if ($this->booted) {
             return $this;
+        }
+
+        if ($withAllLaravelProviders) {
+            $this->withAllLaravelProviders();
         }
 
         // Run bootstrapper
@@ -245,11 +246,9 @@ class Application extends LaravelContainer
     }
 
     /**
-     * Setup all LaravelProvider.
-     *
-     * @param array $additionProviders
+     * Setup all Laravel providers.
      */
-    private function setupLaravelProviders($additionProviders = []): void
+    private function withAllLaravelProviders(): void
     {
         static $defaultProvider = [
             'Illuminate\Auth\AuthServiceProvider',
@@ -277,12 +276,13 @@ class Application extends LaravelContainer
         ];
 
         collect($defaultProvider)
-            ->merge($additionProviders)
             ->filter(function ($provider) {
                 return class_exists($provider);
             })->each(function ($provider) {
                 $this->register($provider);
             });
+
+        $this->bindLaravelService();
     }
 
     private function bindPathsInContainer(): void

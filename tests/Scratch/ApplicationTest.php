@@ -59,7 +59,9 @@ class ApplicationTest extends TestCase
 
     public function testCheckInstanceInContainer(): void
     {
-        $this->target->setupView(__DIR__, $this->vfs->url());
+        $this->target->setupRunningInConsole(false)
+            ->setupView(__DIR__, $this->vfs->url())
+            ->bootstrap();
 
         $this->assertTrue($this->target->has('view'));
         $this->assertFalse($this->target->has('whatever'));
