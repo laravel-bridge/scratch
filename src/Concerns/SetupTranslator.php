@@ -9,19 +9,21 @@ trait SetupTranslator
 {
     /**
      * @param string $locale
-     * @return Application
+     * @return static
      */
-    public function setupLocale($locale): Application
+    public function setupLocale($locale)
     {
-        return $this->setupConfig('app.locale', $locale);
+        $this->setupConfig('app.locale', $locale);
+
+        return $this;
     }
 
     /**
      * @param string $langPath
-     * @return Application
+     * @return static
      * @see TranslationServiceProvider
      */
-    public function setupTranslator($langPath): Application
+    public function setupTranslator($langPath)
     {
         $this->instance('path.lang', $langPath);
 

@@ -9,10 +9,10 @@ trait SetupView
     /**
      * @param string|array $viewPath
      * @param string $compiledPath
-     * @return Application
+     * @return static
      * @see ViewServiceProvider
      */
-    public function setupView($viewPath, $compiledPath): Application
+    public function setupView($viewPath, $compiledPath)
     {
         $this->setupConfigs([
             'view.compiled' => $compiledPath,

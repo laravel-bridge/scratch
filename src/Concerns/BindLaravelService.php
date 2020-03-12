@@ -6,8 +6,10 @@ trait BindLaravelService
 {
     /**
      * Setup all LaravelProvider.
+     *
+     * @return static
      */
-    private function bindLaravelService(): void
+    private function bindLaravelService()
     {
         if ($this->has('db')) {
             $this->alias('db', \Illuminate\Database\DatabaseManager::class);
@@ -32,5 +34,7 @@ trait BindLaravelService
             $this->alias('view', \Illuminate\View\Factory::class);
             $this->alias('view', \Illuminate\Contracts\View\Factory::class);
         }
+
+        return $this;
     }
 }

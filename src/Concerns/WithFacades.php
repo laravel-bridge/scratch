@@ -16,10 +16,11 @@ trait WithFacades
     /**
      * Register the facades for the application.
      *
+     * @param array $customAliases
      * @return static
      * @see https://github.com/laravel/lumen-framework/blob/v6.3.4/src/Application.php#L705
      */
-    public function withFacades($customAliases = [])
+    public function withFacades(array $customAliases = [])
     {
         // Workaround for testing
         Facade::clearResolvedInstances();
@@ -37,7 +38,7 @@ trait WithFacades
      * @return static
      * @see https://github.com/laravel/lumen-framework/blob/v6.3.4/src/Application.php#L720
      */
-    public function withAliases($customAliases = [])
+    public function withAliases(array $customAliases = [])
     {
         if (static::$aliasesRegistered) {
             return $this;

@@ -14,9 +14,9 @@ trait Bootstrapper
 
     /**
      * @param string $bootstrapper
-     * @return Application
+     * @return static
      */
-    public function setupBootstrapper(string $bootstrapper): Application
+    public function setupBootstrapper(string $bootstrapper)
     {
         if (!in_array($bootstrapper, $this->bootstrappers, true)) {
             $this->bootstrappers[] = $bootstrapper;
@@ -26,9 +26,9 @@ trait Bootstrapper
     }
 
     /**
-     * @return Application
+     * @return static
      */
-    public function useConfigurationLoader(): Application
+    public function useConfigurationLoader()
     {
         return $this->setupBootstrapper(ConfigurationLoader::class);
     }
