@@ -4,6 +4,7 @@ namespace Tests\Scratch;
 
 use Illuminate\Config\Repository;
 use Illuminate\Container\Container;
+use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\Factory as ViewFactory;
@@ -157,5 +158,15 @@ class ApplicationTest extends TestCase
             ->bootstrap();
 
         $this->assertSame('from-setup', $this->target['config']['foo.bar']);
+    }
+
+    public function testWithoutLaravelProvider(): void
+    {
+        $this->target
+            ->withoutLaravelProvider([PaginationServiceProvider::class])
+            ->setupView(__DIR__, $this->vfs->url())
+            ->bootstrap();
+
+        $this->assertInstanceOf(ViewFactory::class, $this->target->make('view'));
     }
 }

@@ -51,6 +51,34 @@ class Application extends LaravelContainer
     private $serviceProviders = [];
 
     /**
+     * @var string[]
+     */
+    private $defaultProvider = [
+        'Illuminate\Auth\AuthServiceProvider',
+        'Illuminate\Broadcasting\BroadcastServiceProvider',
+        'Illuminate\Bus\BusServiceProvider',
+        'Illuminate\Cache\CacheServiceProvider',
+        'Illuminate\Cookie\CookieServiceProvider',
+        'Illuminate\Database\DatabaseServiceProvider',
+        'Illuminate\Events\EventServiceProvider',
+        'Illuminate\Encryption\EncryptionServiceProvider',
+        'Illuminate\Filesystem\FilesystemServiceProvider',
+        'Illuminate\Hashing\HashServiceProvider',
+        'Illuminate\Log\LogServiceProvider',
+        'Illuminate\Mail\MailServiceProvider',
+        'Illuminate\Notifications\NotificationServiceProvider',
+        'Illuminate\Pagination\PaginationServiceProvider',
+        'Illuminate\Pipeline\PipelineServiceProvider',
+        'Illuminate\Queue\QueueServiceProvider',
+        'Illuminate\Redis\RedisServiceProvider',
+        'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
+        'Illuminate\Session\SessionServiceProvider',
+        'Illuminate\Translation\TranslationServiceProvider',
+        'Illuminate\Validation\ValidationServiceProvider',
+        'Illuminate\View\ViewServiceProvider',
+    ];
+
+    /**
      * Create an Application from Laravel container
      *
      * @param LaravelContainer $container
@@ -245,36 +273,26 @@ class Application extends LaravelContainer
     }
 
     /**
+     * @param mixed ...$providers
+     * @return static
+     */
+    public function withoutLaravelProvider(...$providers): Application
+    {
+        if (is_array($providers[0])) {
+            $providers = array_values($providers[0]);
+        }
+
+        $this->defaultProvider = array_diff($this->defaultProvider, $providers);
+
+        return $this;
+    }
+
+    /**
      * Setup all Laravel providers.
      */
     private function withAllLaravelProviders(): void
     {
-        static $defaultProvider = [
-            'Illuminate\Auth\AuthServiceProvider',
-            'Illuminate\Broadcasting\BroadcastServiceProvider',
-            'Illuminate\Bus\BusServiceProvider',
-            'Illuminate\Cache\CacheServiceProvider',
-            'Illuminate\Cookie\CookieServiceProvider',
-            'Illuminate\Database\DatabaseServiceProvider',
-            'Illuminate\Events\EventServiceProvider',
-            'Illuminate\Encryption\EncryptionServiceProvider',
-            'Illuminate\Filesystem\FilesystemServiceProvider',
-            'Illuminate\Hashing\HashServiceProvider',
-            'Illuminate\Log\LogServiceProvider',
-            'Illuminate\Mail\MailServiceProvider',
-            'Illuminate\Notifications\NotificationServiceProvider',
-            'Illuminate\Pagination\PaginationServiceProvider',
-            'Illuminate\Pipeline\PipelineServiceProvider',
-            'Illuminate\Queue\QueueServiceProvider',
-            'Illuminate\Redis\RedisServiceProvider',
-            'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
-            'Illuminate\Session\SessionServiceProvider',
-            'Illuminate\Translation\TranslationServiceProvider',
-            'Illuminate\Validation\ValidationServiceProvider',
-            'Illuminate\View\ViewServiceProvider',
-        ];
-
-        collect($defaultProvider)
+        collect($this->defaultProvider)
             ->filter(function ($provider) {
                 return class_exists($provider);
             })->each(function ($provider) {
