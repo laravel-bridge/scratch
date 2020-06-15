@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Mockery;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -23,8 +22,6 @@ class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
-        Mockery::close();
-
         $this->vfs = null;
     }
 
