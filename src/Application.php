@@ -7,17 +7,26 @@ use Illuminate\Container\Container as LaravelContainer;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Traits\Macroable;
 use Monolog\Handler\NullHandler;
 
 class Application extends LaravelContainer
 {
+    /**
+     * For custom Application method
+     */
+    use Macroable;
+
+    /**
+     * Bridge methods
+     */
     use Concerns\BindLaravelService;
-    use Concerns\WithFacades;
     use Concerns\Bootstrapper;
     use Concerns\SetupDatabase;
     use Concerns\SetupLog;
     use Concerns\SetupTranslator;
     use Concerns\SetupView;
+    use Concerns\WithFacades;
     use Concerns\Workaround;
 
     private const DEFAULT_CONFIG = [
