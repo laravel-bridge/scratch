@@ -177,7 +177,7 @@ Bootstrap is a lifecycle in Laravel [Kernel](https://github.com/laravel/framewor
 
 In Scratch application, we can load config functionally. and use `withFacades()` to register Facade first. finally, call `ServiceProvider::register()` on every provider when call `bootstrap()`. Next, call `ServiceProvider::boot()` on every provider, just like Laravel Kernel.
 
-`bootstrap()` has an argument `$withAllLaravelProviders`, register all laravel provider when true. Also, It's default true. 
+`bootstrap()` has an argument `$withAllLaravelProviders`, register all laravel provider when true. Also, It's default true. However, use `withoutLaravelProvider()` if you don't want use some Laravel providers. 
 
 ## Example Projects or Libraries
 
