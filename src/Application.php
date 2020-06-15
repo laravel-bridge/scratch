@@ -62,7 +62,7 @@ class Application extends LaravelContainer
     /**
      * @var string[]
      */
-    private $defaultProvider = [
+    private $defaultLaravelProviders = [
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
@@ -139,17 +139,17 @@ class Application extends LaravelContainer
     }
 
     /**
-     * @param bool $withAllLaravelProviders
+     * @param bool $withDefaultLaravelProviders
      * @return Application
      */
-    public function bootstrap($withAllLaravelProviders = true): Application
+    public function bootstrap($withDefaultLaravelProviders = true): Application
     {
         if ($this->booted) {
             return $this;
         }
 
-        if ($withAllLaravelProviders) {
-            $this->withAllLaravelProviders();
+        if ($withDefaultLaravelProviders) {
+            $this->withDefaultLaravelProviders();
         }
 
         // Run bootstrapper
@@ -291,7 +291,7 @@ class Application extends LaravelContainer
             $providers = array_values($providers[0]);
         }
 
-        $this->defaultProvider = array_diff($this->defaultProvider, $providers);
+        $this->defaultLaravelProviders = array_diff($this->defaultLaravelProviders, $providers);
 
         return $this;
     }
@@ -299,9 +299,9 @@ class Application extends LaravelContainer
     /**
      * Setup all Laravel providers.
      */
-    private function withAllLaravelProviders(): void
+    private function withDefaultLaravelProviders(): void
     {
-        collect($this->defaultProvider)
+        collect($this->defaultLaravelProviders)
             ->filter(function ($provider) {
                 return class_exists($provider);
             })->each(function ($provider) {
