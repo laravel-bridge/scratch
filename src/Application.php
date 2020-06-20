@@ -42,6 +42,9 @@ class Application extends LaravelContainer
             ],
             'default' => 'null',
         ],
+        'view' => [
+            'paths' => [],
+        ],
     ];
 
     /**
@@ -246,9 +249,9 @@ class Application extends LaravelContainer
     /**
      * @param string $key
      * @param mixed $value
-     * @return Application
+     * @return static
      */
-    public function setupConfig(string $key, $value): Application
+    public function setupConfig(string $key, $value)
     {
         $this['config'][$key] = $value;
 

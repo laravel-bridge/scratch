@@ -106,6 +106,20 @@ class ApplicationTest extends TestCase
         $this->assertSame('bar', $actual);
     }
 
+    public function testLangDirectiveWithAppendViewPath(): void
+    {
+        $this->target->setupLocale('en')
+            ->setupRunningInConsole(false)
+            ->setupTranslator($this->resourcePath('lang'))
+            ->setupView($this->resourcePath('views'), $this->vfs->url(), true)
+            ->withFacades()
+            ->bootstrap();
+
+        $actual = View::make('lang_test')->render();
+
+        $this->assertSame('bar', $actual);
+    }
+
     public function testLog(): void
     {
         $spy = new TestHandler();
