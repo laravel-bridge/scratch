@@ -152,8 +152,10 @@ class Application extends LaravelContainer
         }
 
         if ($withDefaultLaravelProviders) {
-            $this->withDefaultLaravelProviders();
+            $this->registerDefaultLaravelProviders();
         }
+
+        $this->registerServiceProviders();
 
         // Run bootstrapper
         collect($this->bootstrappers)->each(function ($bootstrapper) {
@@ -188,40 +190,6 @@ class Application extends LaravelContainer
         });
 
         return array_values($found)[0] ?? null;
-    }
-
-    /**
-     * @param ServiceProvider|string $provider
-     * @return ServiceProvider
-     * @see https://github.com/laravel/framework/blob/v6.13.1/src/Illuminate/Foundation/Application.php#L603
-     */
-    public function register($provider): ServiceProvider
-    {
-        if ($registered = $this->getProvider($provider)) {
-            return $registered;
-        }
-
-        if (is_string($provider)) {
-            $provider = new $provider($this);
-        }
-
-        $provider->register();
-
-        if (property_exists($provider, 'bindings')) {
-            foreach ($provider->bindings as $key => $value) {
-                $this->bind($key, $value);
-            }
-        }
-
-        if (property_exists($provider, 'singletons')) {
-            foreach ($provider->singletons as $key => $value) {
-                $this->singleton($key, $value);
-            }
-        }
-
-        $this->serviceProviders[] = $provider;
-
-        return $provider;
     }
 
     /**
@@ -279,7 +247,15 @@ class Application extends LaravelContainer
      */
     public function setupProvider($provider): Application
     {
-        $this->register($provider);
+        if ($registered = $this->getProvider($provider)) {
+            return $this;
+        }
+
+        if (is_string($provider)) {
+            $provider = new $provider($this);
+        }
+
+        $this->serviceProviders[] = $provider;
 
         return $this;
     }
@@ -300,18 +276,52 @@ class Application extends LaravelContainer
     }
 
     /**
-     * Setup all Laravel providers.
+     * Register Laravel providers.
      */
-    private function withDefaultLaravelProviders(): void
+    private function registerDefaultLaravelProviders(): void
     {
         collect($this->defaultLaravelProviders)
-            ->filter(function ($provider) {
+            ->filter(static function ($provider) {
                 return class_exists($provider);
             })->each(function ($provider) {
-                $this->register($provider);
+                $this->registerProvider(new $provider($this));
             });
 
         $this->bindLaravelService();
+    }
+
+    /**
+     * Register custom service providers.
+     */
+    private function registerServiceProviders(): void
+    {
+        foreach ($this->serviceProviders as $serviceProvider) {
+            $this->registerProvider($serviceProvider);
+        }
+    }
+
+    /**
+     * @param ServiceProvider $provider
+     * @return ServiceProvider
+     * @see https://github.com/laravel/framework/blob/v6.13.1/src/Illuminate/Foundation/Application.php#L603
+     */
+    private function registerProvider(ServiceProvider $provider): ServiceProvider
+    {
+        $provider->register();
+
+        if (property_exists($provider, 'bindings')) {
+            foreach ($provider->bindings as $key => $value) {
+                $this->bind($key, $value);
+            }
+        }
+
+        if (property_exists($provider, 'singletons')) {
+            foreach ($provider->singletons as $key => $value) {
+                $this->singleton($key, $value);
+            }
+        }
+
+        return $provider;
     }
 
     private function bindPathsInContainer(): void
