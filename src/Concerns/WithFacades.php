@@ -16,17 +16,18 @@ trait WithFacades
     /**
      * Register the facades for the application.
      *
-     * @param array $customAliases
+     * @param array $aliases
+     * @param bool $mergeDefaultAliases
      * @return static
      * @see https://github.com/laravel/lumen-framework/blob/v6.3.4/src/Application.php#L705
      */
-    public function withFacades(array $customAliases = [])
+    public function withFacades(array $aliases = [], bool $mergeDefaultAliases = true)
     {
         // Workaround for testing
         Facade::clearResolvedInstances();
         Facade::setFacadeApplication($this);
 
-        $this->withAliases($customAliases);
+        $this->withAliases($aliases, $mergeDefaultAliases);
 
         return $this;
     }
