@@ -47,28 +47,28 @@ trait WithFacades
         static::$aliasesRegistered = true;
 
         $defaults = [
-            'Illuminate\Support\Facades\App' => 'App',
-            'Illuminate\Support\Facades\Auth' => 'Auth',
-            'Illuminate\Support\Arr' => 'Arr',
-            'Illuminate\Support\Facades\Cache' => 'Cache',
-            'Illuminate\Support\Facades\Config' => 'Config',
-            'Illuminate\Support\Facades\DB' => 'DB',
-            'Illuminate\Database\Eloquent\Model' => 'Eloquent',
-            'Illuminate\Support\Facades\Event' => 'Event',
-            'Illuminate\Support\Facades\File' => 'File',
-            'Illuminate\Support\Facades\Gate' => 'Gate',
-            'Illuminate\Support\Facades\Lang' => 'Lang',
-            'Illuminate\Support\Facades\Log' => 'Log',
-            'Illuminate\Support\Facades\Queue' => 'Queue',
-            'Illuminate\Support\Facades\Schema' => 'Schema',
-            'Illuminate\Support\Facades\Storage' => 'Storage',
-            'Illuminate\Support\Str' => 'Str',
-            'Illuminate\Support\Facades\URL' => 'URL',
-            'Illuminate\Support\Facades\Validator' => 'Validator',
-            'Illuminate\Support\Facades\View' => 'View',
+             'App' => 'Illuminate\Support\Facades\App',
+             'Auth' => 'Illuminate\Support\Facades\Auth',
+             'Arr' => 'Illuminate\Support\Arr',
+             'Cache' => 'Illuminate\Support\Facades\Cache',
+             'Config' => 'Illuminate\Support\Facades\Config',
+             'DB' => 'Illuminate\Support\Facades\DB',
+             'Eloquent' => 'Illuminate\Database\Eloquent\Model',
+             'Event' => 'Illuminate\Support\Facades\Event',
+             'File' => 'Illuminate\Support\Facades\File',
+             'Gate' => 'Illuminate\Support\Facades\Gate',
+             'Lang' => 'Illuminate\Support\Facades\Lang',
+             'Log' => 'Illuminate\Support\Facades\Log',
+             'Queue' => 'Illuminate\Support\Facades\Queue',
+             'Schema' => 'Illuminate\Support\Facades\Schema',
+             'Storage' => 'Illuminate\Support\Facades\Storage',
+             'Str' => 'Illuminate\Support\Str',
+             'URL' => 'Illuminate\Support\Facades\URL',
+             'Validator' => 'Illuminate\Support\Facades\Validator',
+             'View' => 'Illuminate\Support\Facades\View',
         ];
 
-        foreach (array_merge($defaults, $customAliases) as $original => $alias) {
+        foreach (array_merge($defaults, $customAliases) as $alias => $original) {
             if (class_exists($original)) {
                 class_alias($original, $alias);
             }
