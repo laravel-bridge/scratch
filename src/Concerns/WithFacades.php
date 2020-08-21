@@ -34,11 +34,12 @@ trait WithFacades
     /**
      * Register the aliases for the application.
      *
-     * @param array $customAliases
+     * @param array $aliases
+     * @param bool $mergeDefaultAliases
      * @return static
      * @see https://github.com/laravel/lumen-framework/blob/v6.3.4/src/Application.php#L720
      */
-    public function withAliases(array $customAliases = [])
+    public function withAliases(array $aliases = [], bool $mergeDefaultAliases = true)
     {
         if (static::$aliasesRegistered) {
             return $this;
@@ -46,29 +47,31 @@ trait WithFacades
 
         static::$aliasesRegistered = true;
 
-        $defaults = [
-             'App' => 'Illuminate\Support\Facades\App',
-             'Auth' => 'Illuminate\Support\Facades\Auth',
-             'Arr' => 'Illuminate\Support\Arr',
-             'Cache' => 'Illuminate\Support\Facades\Cache',
-             'Config' => 'Illuminate\Support\Facades\Config',
-             'DB' => 'Illuminate\Support\Facades\DB',
-             'Eloquent' => 'Illuminate\Database\Eloquent\Model',
-             'Event' => 'Illuminate\Support\Facades\Event',
-             'File' => 'Illuminate\Support\Facades\File',
-             'Gate' => 'Illuminate\Support\Facades\Gate',
-             'Lang' => 'Illuminate\Support\Facades\Lang',
-             'Log' => 'Illuminate\Support\Facades\Log',
-             'Queue' => 'Illuminate\Support\Facades\Queue',
-             'Schema' => 'Illuminate\Support\Facades\Schema',
-             'Storage' => 'Illuminate\Support\Facades\Storage',
-             'Str' => 'Illuminate\Support\Str',
-             'URL' => 'Illuminate\Support\Facades\URL',
-             'Validator' => 'Illuminate\Support\Facades\Validator',
-             'View' => 'Illuminate\Support\Facades\View',
-        ];
+        if ($mergeDefaultAliases) {
+            $aliases = array_merge([
+                'App' => 'Illuminate\Support\Facades\App',
+                'Auth' => 'Illuminate\Support\Facades\Auth',
+                'Arr' => 'Illuminate\Support\Arr',
+                'Cache' => 'Illuminate\Support\Facades\Cache',
+                'Config' => 'Illuminate\Support\Facades\Config',
+                'DB' => 'Illuminate\Support\Facades\DB',
+                'Eloquent' => 'Illuminate\Database\Eloquent\Model',
+                'Event' => 'Illuminate\Support\Facades\Event',
+                'File' => 'Illuminate\Support\Facades\File',
+                'Gate' => 'Illuminate\Support\Facades\Gate',
+                'Lang' => 'Illuminate\Support\Facades\Lang',
+                'Log' => 'Illuminate\Support\Facades\Log',
+                'Queue' => 'Illuminate\Support\Facades\Queue',
+                'Schema' => 'Illuminate\Support\Facades\Schema',
+                'Storage' => 'Illuminate\Support\Facades\Storage',
+                'Str' => 'Illuminate\Support\Str',
+                'URL' => 'Illuminate\Support\Facades\URL',
+                'Validator' => 'Illuminate\Support\Facades\Validator',
+                'View' => 'Illuminate\Support\Facades\View',
+            ], $aliases);
+        }
 
-        foreach (array_merge($defaults, $customAliases) as $alias => $original) {
+        foreach ($aliases as $alias => $original) {
             if (class_exists($original)) {
                 class_alias($original, $alias);
             }
