@@ -7,9 +7,11 @@ use Illuminate\Container\Container;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory as ViewFactory;
 use Illuminate\View\ViewServiceProvider;
 use LaravelBridge\Scratch\Application;
+use Mockery;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use Psr\Container\NotFoundExceptionInterface;
@@ -182,5 +184,31 @@ class ApplicationTest extends TestCase
             ->bootstrap();
 
         $this->assertInstanceOf(ViewFactory::class, $this->target->make('view'));
+    }
+
+    public function testSetupProviderWillRegisterOnce(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $mock = Mockery::mock(ServiceProvider::class);
+        $mock->shouldReceive('register');
+
+        $this->target->setupProvider($mock, true);
+
+        $mock->shouldHaveReceived('register')->once();
+    }
+
+    public function testSetupProviderAndBootstrapWillRegisterOnce(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $mock = Mockery::mock(ServiceProvider::class);
+        $mock->shouldReceive('register');
+
+        $this->target
+            ->setupProvider($mock, true)
+            ->bootstrap();
+
+        $mock->shouldHaveReceived('register')->once();
     }
 }

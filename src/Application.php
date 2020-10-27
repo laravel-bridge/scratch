@@ -58,9 +58,9 @@ class Application extends LaravelContainer
     private $booted = false;
 
     /**
-     * @var ServiceProvider[]
+     * @var array
      */
-    private $serviceProviders = [];
+    private $bootedProviders = [];
 
     /**
      * @var string[]
@@ -89,6 +89,16 @@ class Application extends LaravelContainer
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
     ];
+
+    /**
+     * @var array
+     */
+    private $registeredProvider = [];
+
+    /**
+     * @var ServiceProvider[]
+     */
+    private $serviceProviders = [];
 
     /**
      * Create an Application from Laravel container
@@ -166,9 +176,7 @@ class Application extends LaravelContainer
         LaravelContainer::setInstance($this);
 
         array_walk($this->serviceProviders, function ($provider) {
-            if (method_exists($provider, 'boot')) {
-                $this->call([$provider, 'boot']);
-            }
+            $this->bootProvider($provider);
         });
 
         $this->booted = true;
@@ -199,7 +207,10 @@ class Application extends LaravelContainer
     {
         parent::flush();
 
+        $this->booted = false;
         $this->bootstrappers = [];
+        $this->bootedProviders = [];
+        $this->registeredProvider = [];
         $this->serviceProviders = [];
     }
 
@@ -243,9 +254,11 @@ class Application extends LaravelContainer
      * Setup user define provider.
      *
      * @param ServiceProvider|string $provider
+     * @param bool $register
+     * @param bool $boot
      * @return static
      */
-    public function setupProvider($provider): Application
+    public function setupProvider($provider, bool $register = false, bool $boot = false): Application
     {
         if ($registered = $this->getProvider($provider)) {
             return $this;
@@ -256,6 +269,14 @@ class Application extends LaravelContainer
         }
 
         $this->serviceProviders[] = $provider;
+
+        if ($register) {
+            $this->registerProvider($provider);
+        }
+
+        if ($boot) {
+            $this->bootProvider($provider);
+        }
 
         return $this;
     }
@@ -273,6 +294,27 @@ class Application extends LaravelContainer
         $this->defaultLaravelProviders = array_diff($this->defaultLaravelProviders, $providers);
 
         return $this;
+    }
+
+    /**
+     * @param ServiceProvider $provider
+     * @return ServiceProvider
+     */
+    private function bootProvider(ServiceProvider $provider): ServiceProvider
+    {
+        $class = get_class($provider);
+
+        if (array_key_exists($class, $this->bootedProviders)) {
+            return $provider;
+        }
+
+        if (method_exists($provider, 'boot')) {
+            $this->call([$provider, 'boot']);
+        }
+
+        $this->bootedProviders[$class] = true;
+
+        return $provider;
     }
 
     /**
@@ -307,6 +349,12 @@ class Application extends LaravelContainer
      */
     private function registerProvider(ServiceProvider $provider): ServiceProvider
     {
+        $class = get_class($provider);
+
+        if (array_key_exists($class, $this->registeredProvider)) {
+            return $provider;
+        }
+
         $provider->register();
 
         if (property_exists($provider, 'bindings')) {
@@ -320,6 +368,8 @@ class Application extends LaravelContainer
                 $this->singleton($key, $value);
             }
         }
+
+        $this->registeredProvider[$class] = true;
 
         return $provider;
     }
