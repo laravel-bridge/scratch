@@ -19,8 +19,5 @@ check:
 test: check
 	phpdbg -qrr vendor/bin/phpunit
 
-analyse:
-	php vendor/bin/phpstan analyse src --level=4
-
 coverage: test
 	@if [ "`uname`" = "Darwin" ]; then open build/coverage/index.html; fi
