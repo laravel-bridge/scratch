@@ -33,11 +33,9 @@ Method `setupDatabaseConfig()` has 3 arguments, the following is signature:
 public function setupDatabaseConfig(string $name, array $connection, bool $default = false);
 ```
 
-`$name` is the database name.
-
-`$connection` is the database config only.
-
-`$default` will set the default log driver if true.
+* `$name` is the database name.
+* `$connection` is the database config only.
+* `$default` will set the default database if true.
 
 Method `setupDatabaseConfigs()` has 2 arguments, the following is signature:
 
@@ -45,9 +43,8 @@ Method `setupDatabaseConfigs()` has 2 arguments, the following is signature:
 public function setupDatabaseConfig(array $connections, string $default = 'default');
 ```
 
-`$connections` is the all connections config.
-
-`$default` specify the connection is default.
+* `$connections` is the all connections config.
+* `$default` specify the connection is default.
 
 #### Examples
 
@@ -123,11 +120,9 @@ Method `setupLogger()` has 3 arguments, the following is signature:
 public function setupLogger(string $name, LoggerInterface $logger, bool $default = false);
 ```
 
-`$name` is the Log name, and use Facade `Log::driver($name)` to specify.
-
-`$logger` is the instance implemented [`Psr\Log\LoggerInterface`](https://www.php-fig.org/psr/psr-3/).
-
-`$default` will set the default log driver if true.
+* `$name` is the Log name, and use Facade `Log::driver($name)` to specify.
+* `$logger` is the instance implemented [`Psr\Log\LoggerInterface`](https://www.php-fig.org/psr/psr-3/).
+* `$default` will set the default log driver if true.
 
 Here is a testing example:
 

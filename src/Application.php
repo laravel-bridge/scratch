@@ -332,9 +332,6 @@ class Application extends LaravelContainer
         $this->bindLaravelService();
     }
 
-    /**
-     * Register custom service providers.
-     */
     private function registerServiceProviders(): void
     {
         foreach ($this->serviceProviders as $serviceProvider) {
